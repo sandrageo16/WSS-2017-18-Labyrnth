@@ -2,49 +2,53 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <iostream>
+#include <string>
+#include <fstream>
 
-#include "../OLEDDisplay.h"
+#include "OLEDDisplay.h"
 
 using std::chrono::steady_clock;
 using namespace GFX;
-int main(void){
-OLEDDisplay lcd(128, 128);
-lcd.enable();
-lcd.setBgColor(COLOR_BLACK);
-lcd.setDrawColor(COLOR_WHITE);
-lcd.setTextColor(COLOR_WHITE);
+using namespace std;
+int display [128][128];
+void getInput();
 
-while(1){
-	lcd.clearScreen();
-	lcd.drawRect(0,0, 127, 127);
-// 1st section
-	lcd.drawLine(0, 0, 127, 127);
-	lcd.drawLine(0, 127, 127, 0);
-	lcd.drawLine(15, 15, 79, 15);
-	lcd.drawLine(95, 15, 111, 15);
-	lcd.drawLine(31, 31, 47, 31);
-	lcd.drawLine(63, 31, 95, 31);
-	lcd.drawLine(47, 47, 55, 47);
-	lcd.drawLine(71, 47, 79, 47);
-// 2nd section
-	lcd.drawLine(111, 15, 111, 79);
-	lcd.drawLine(111, 95, 111, 111);
-	lcd.drawLine(95, 31, 95, 47);
-	lcd.drawLine(95, 63, 95, 95);
-	lcd.drawLine(79, 47, 79, 55);
-	lcd.drawLine(79, 71, 79, 79);
-	
-//3rd Section
-	lcd.drawLine(15, 15, 15, 79);
-	lcd.drawLine(15, 95, 15, 111);
-	lcd.drawLine(31, 31, 31, 47);
-	lcd.drawLine(21, 63, 31, 95);
-	lcd.drawLine(47, 47, 47, 55);
-	lcd.drawLine(47, 71, 47, 79);	
-	
-	lcd.drawCircle(111, 8, 8);
-	lcd.fillCircle(111, 8, 8);
-	
+void getInput(){
+	int i,j;
+	i=0;
+	string line;
+	ifstream myfile("Array.txt");
+	if (myfile.is_open()){
+		for (i=0; i<128; i++){
+			getline (myfile, line);
+			for (j=0; j<128; j++){
+				display[j][i]= line[j];
+			}
+		}
+	myfile.close();
+	}
+	else cout<< "Ünable to open file \n";
+	printf("test3 \n");
+}	
+int main(void){
+	OLEDDisplay lcd(128, 128);
+	lcd.enable();
+	lcd.setBgColor(COLOR_BLACK);
+	lcd.setDrawColor(COLOR_WHITE);
+	lcd.setTextColor(COLOR_WHITE);
+	int k,l;
+	getInput();
+	while(1){
+		lcd.clearScreen();
+			for (l=0; l<128; l++){
+				for (k=0; k<128; k++){
+					if (display[l][k] =='1'){
+						lcd.drawPixel(l,k);
+					}
+				}
+			}
 	lcd.flush();
-}
+
+	}
 }
