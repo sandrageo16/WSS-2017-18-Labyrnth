@@ -22,6 +22,7 @@ void getInput(){
 			getline (myfile, line);
 			for (j=0; j<128; j++){
 				display[j][i]= line[j];
+//				printf("%d,%d,%d\n",line[j]-'0',line[j],display[j][i]);
 			}
 		}
 	myfile.close();
@@ -43,13 +44,13 @@ void lcd_display(OLEDDisplay &lcd){
 	lcd.setCursor(36, 17);
 	lcd.setTextColor(COLOR_WHITE);
 	lcd.print("LABRYNTH");
-	lcd.drawCircle(111, 119, 4);
+/*	lcd.drawCircle(111, 119, 4);
 	lcd.fillCircle(111, 119, 4);
 	lcd.drawCircle(31, 106, 4);
 	lcd.fillCircle(31, 106, 4);
 	lcd.drawCircle(79, 87, 4);
 	lcd.fillCircle(79, 87, 4);
-
+*/
 	lcd.drawCircle(119, 111, 4);
 	lcd.fillCircle(119, 111, 4);	
 	lcd.drawCircle(103, 31, 4);
@@ -123,10 +124,11 @@ void testFPS() {
 	usleep(100000);
 	i2c.writeReg(0x6B, 0x00);
 	while (true) {
+		lcd.clearScreen();
 		lcd_display(lcd);
-		lcd.flush();
-
-	//read raw accelerometer values
+//		lcd.flush();
+		
+//read raw accelerometer values
 	uint8_t acc_raw[6];
 	int len =i2c.readBytesReg(0x3B, acc_raw,6);
 	if(len <0)
@@ -148,18 +150,44 @@ void testFPS() {
 		xnew0 = xnew1 = x0 + (speedx1*dt);
 		ynew0 = ynew1 = y0 + (speedy1*dt);
 
-		lcd.clearScreen();
+	//	lcd.clearScreen();
 		if ((int(xnew0)== 111) & (int(ynew0)== 119)){ end_game(lcd);}
 		if ((int(xnew0)== 31) & (int(ynew0)== 106)){ end_game(lcd);}
 		if ((int(xnew0)== 79) & (int(ynew0)== 87)){ end_game(lcd);}
-		if (display[int(xnew0)][int(ynew0)]=='1'){ xnew0 = x0; ynew0 = y0;}
+		if (display[int(xnew0)][int(ynew0)]=='1')
+		{
+			if(int(ynew0) >= 116 && (int)(ynew0) <= 123)
+			{
+				if(int(xnew0) >= 110 && int(xnew0)<= 116)
+					end_game(lcd);
+			}
+			else
+			{
+				xnew0 = x0;
+				ynew0 = y0;
+				printf("boundary\n");
+			}
+
+			if((display[(int)(xnew0 + 1)][(int)(ynew0)] == '1')|| (display[(int)(xnew0 - 1)][(int) (ynew0)] == '1'))
+			{
+				speedy1 = 0;
+				printf("Vertical");
+			}
+			
+			if((display[int(xnew0)][int(ynew0 + 1)] == '1') || (display[int(xnew0)][int(ynew0 - 1)] == '1') )
+			{
+				speedx1 = 0;
+				printf("Horizontal");
+			}
+		       		
+		}
         if (xnew0 < 2) { xnew0=2; speedx1=0;}
         if (xnew0 > 125) { xnew0=125; speedx1=0;}
         if (ynew0 < 2) { ynew0=2; speedy1=0;}
         if (ynew0 > 125) { ynew0=125; speedy1=0;}
 
          
-		//printf("in while, x0: %f, x1: %f, y0: %f, y1: %f,speedx = %f,speedy = %f,accx = %f,accy = %f\n",xnew0,xnew1,ynew0,ynew1,speedx1,speedy1,accx,accy);
+		printf("in while, xnew0: %f, x0: %f,  ynew0: %f, y0: %f,speedx = %f,speedy = %f,accx = %f,accy = %f\n",xnew0,x0,ynew0,y0,speedx1,speedy1,accx,accy);
 		lcd.drawCircle(xnew0,ynew0,radius);
 
 		speedx = speedx1;
@@ -170,7 +198,7 @@ void testFPS() {
 		lcd.flush();
 		
 		steady_clock::time_point curTime = steady_clock::now();
-		if (curTime - lastTime >= std::chrono::seconds(1)) {
+		if (curTime - lastTime >= std::chrono::milliseconds(1000)) {
 			uint32_t curFC = lcd.getFrameCounter();
 			printf("fps: %d\n", curFC - lastFC);
 			lastTime = curTime;
