@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <cstdlib>
 #include "OLEDDisplay.h"
 
 using std::chrono::steady_clock;
@@ -35,7 +36,8 @@ void lcd_display(OLEDDisplay &lcd){
 	int k,l;
 	for (l=0; l<128; l++){
 		for (k=0; k<128; k++){
-			if (display[l][k] =='1'){
+			if (display[l][k] >= '1')
+			{
 				lcd.drawPixel(l,k);
 			}
 		}
@@ -154,14 +156,57 @@ void testFPS() {
 		if ((int(xnew0)== 111) & (int(ynew0)== 119)){ end_game(lcd);}
 		if ((int(xnew0)== 31) & (int(ynew0)== 106)){ end_game(lcd);}
 		if ((int(xnew0)== 79) & (int(ynew0)== 87)){ end_game(lcd);}
-		if (display[int(xnew0)][int(ynew0)]=='1')
+
+		int diff = 0;
+		if((std::abs(xnew0 - x0)) > 1)
 		{
-			if(int(ynew0) >= 116 && (int)(ynew0) <= 123)
+		
+		 	diff = xnew0 - x0;
+			if( diff > 0)
+				xnew0 = x0 + 1;
+			else
+				xnew0 = x0 - 1;
+		}
+		if((std::abs(ynew0 - y0)) > 1)
+		{
+			diff = ynew0 - y0;
+			if (diff > 0)
+				ynew0 = y0 + 1;
+			else
+				ynew0 = y0 - 1;
+		}	
+
+		if(display[int(xnew0)][int(ynew0)] == '3')
+		{
+			if(xnew0 < x0)
 			{
-				if(int(xnew0) >= 110 && int(xnew0)<= 116)
+				xnew0 = x0;
+				speedx1 = 0;
+			}
+			ynew0 = y0;
+			printf("slanting3\n");
+		}
+
+		if(display[int(xnew0)][int(ynew0)] == '4')
+		{
+			if(xnew0 > x0)
+			{
+				xnew0 = x0;
+				speedx1 = 0;
+			}
+			ynew0 = y0;
+			printf("slanting4\n");
+		}
+		if(display[int(xnew0)][int(ynew0)] == '5')
+			{
+				
 					end_game(lcd);
 			}
-			else
+
+		if (display[int(xnew0)][int(ynew0)]=='1')
+		{
+			
+		
 			{
 				xnew0 = x0;
 				ynew0 = y0;
@@ -171,15 +216,22 @@ void testFPS() {
 			if((display[(int)(xnew0 + 1)][(int)(ynew0)] == '1')|| (display[(int)(xnew0 - 1)][(int) (ynew0)] == '1'))
 			{
 				speedy1 = 0;
-				printf("Vertical");
+//				speedx1 = 0;
+				printf("Vertical\n");
 			}
 			
 			if((display[int(xnew0)][int(ynew0 + 1)] == '1') || (display[int(xnew0)][int(ynew0 - 1)] == '1') )
 			{
 				speedx1 = 0;
-				printf("Horizontal");
+//				speedy1 = 0;
+				printf("Horizontal\n");
 			}
-		       		
+/*			if(((int)(xnew0) == (int)ynew0) ||( ((int)(xnew0) + (int)(ynew0)) == 127))
+			{
+				printf("slanting\n");
+			}
+
+*/		       		
 		}
         if (xnew0 < 2) { xnew0=2; speedx1=0;}
         if (xnew0 > 125) { xnew0=125; speedx1=0;}
@@ -187,7 +239,7 @@ void testFPS() {
         if (ynew0 > 125) { ynew0=125; speedy1=0;}
 
          
-		printf("in while, xnew0: %f, x0: %f,  ynew0: %f, y0: %f,speedx = %f,speedy = %f,accx = %f,accy = %f\n",xnew0,x0,ynew0,y0,speedx1,speedy1,accx,accy);
+//		printf("in while, xnew0: %f, x0: %f,  ynew0: %f, y0: %f,speedx = %f,speedy = %f,accx = %f,accy = %f\n",xnew0,x0,ynew0,y0,speedx1,speedy1,accx,accy);
 		lcd.drawCircle(xnew0,ynew0,radius);
 
 		speedx = speedx1;
