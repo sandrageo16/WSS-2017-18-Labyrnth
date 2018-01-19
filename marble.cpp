@@ -213,7 +213,7 @@ void testFPS() {
 				printf("boundary\n");
 			}
 
-			if((display[(int)(xnew0 + 1)][(int)(ynew0)] == '1')|| (display[(int)(xnew0 - 1)][(int) (ynew0)] == '1'))
+		/*	if((display[(int)(xnew0 + 1)][(int)(ynew0)] == '1')|| (display[(int)(xnew0 - 1)][(int) (ynew0)] == '1'))
 			{
 				speedy1 = 0;
 //				speedx1 = 0;
@@ -226,7 +226,7 @@ void testFPS() {
 //				speedy1 = 0;
 				printf("Horizontal\n");
 			}
-/*			if(((int)(xnew0) == (int)ynew0) ||( ((int)(xnew0) + (int)(ynew0)) == 127))
+*			if(((int)(xnew0) == (int)ynew0) ||( ((int)(xnew0) + (int)(ynew0)) == 127))
 			{
 				printf("slanting\n");
 			}
