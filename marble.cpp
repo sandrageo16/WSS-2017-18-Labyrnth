@@ -46,26 +46,6 @@ void lcd_display(OLEDDisplay &lcd){
 	lcd.setCursor(36, 17);
 	lcd.setTextColor(COLOR_WHITE);
 	lcd.print("LABRYNTH");
-/*	lcd.drawCircle(111, 119, 4);
-	lcd.fillCircle(111, 119, 4);
-	lcd.drawCircle(31, 106, 4);
-	lcd.fillCircle(31, 106, 4);
-	lcd.drawCircle(79, 87, 4);
-	lcd.fillCircle(79, 87, 4);
-*/
-	lcd.drawCircle(119, 111, 4);
-	lcd.fillCircle(119, 111, 4);	
-	lcd.drawCircle(103, 31, 4);
-	lcd.fillCircle(103, 31, 4);	
-	lcd.drawCircle(87, 79, 4);
-	lcd.fillCircle(87, 79, 4);
-
-	lcd.drawCircle(7, 111, 4);
-	lcd.fillCircle(7, 111, 4);	
-	lcd.drawCircle(23, 31, 4);
-	lcd.fillCircle(23, 31, 4);	
-	lcd.drawCircle(39, 79, 4);
-	lcd.fillCircle(39, 79, 4);
 	
 }
 
@@ -79,6 +59,17 @@ void end_game(OLEDDisplay &lcd){
 	
 }	
 }
+void win_game(OLEDDisplay &lcd){
+	while(1){
+		lcd_display(lcd);
+		lcd.setCursor(36, 33);
+		lcd.setTextColor(COLOR_WHITE);
+		lcd.print("!YOU WON!");
+		lcd.flush();
+	
+}	
+}
+
 void testFPS() {
 	OLEDDisplay lcd(128, 128);
 	lcd.enable();
@@ -101,16 +92,20 @@ void testFPS() {
 
 	i2c.writeReg(0x6B, 0x80);
 	usleep(100*1000);
-	
-	float x0 = 2;
+
+
+	float xmid = 63;
+	float ymid = 63;
+
+	float x0 = 4;
 	float x1 = x0;
-	float y0 = 125;
+	float y0 = 125; 
 	float y1 = y0;
 
+	float xdiff,ydiff,xnew10,ynew10,xnew20,ynew20;;
+
 	float xnew0 = 0;
-	float xnew1 = 0;
 	float ynew0 = 0;
-	float ynew1 = 0;
 	 
 	float speedx = 0;
 	float speedy = 0;
@@ -122,6 +117,7 @@ void testFPS() {
 	
 	float dt = 0.2;
 	float friction = 0.98;
+
 	
 	usleep(100000);
 	i2c.writeReg(0x6B, 0x00);
@@ -149,8 +145,8 @@ void testFPS() {
 		speedx1 = (speedx + (accx*dt)) * friction;
 		speedy1 = (speedy + (accy*dt)) * friction;
 
-		xnew0 = xnew1 = x0 + (speedx1*dt);
-		ynew0 = ynew1 = y0 + (speedy1*dt);
+		xnew0  = x0 + (speedx1*dt);
+		ynew0  = y0 + (speedy1*dt);
 
 	//	lcd.clearScreen();
 		if ((int(xnew0)== 111) & (int(ynew0)== 119)){ end_game(lcd);}
@@ -197,13 +193,20 @@ void testFPS() {
 			ynew0 = y0;
 			printf("slanting4\n");
 		}
-		if(display[int(xnew0)][int(ynew0)] == '5')
+		if(display[int(xnew0)][int(ynew0)] == '7')
 			{
 				
 					end_game(lcd);
 			}
 
-		if (display[int(xnew0)][int(ynew0)]=='1')
+		if(display[int(xnew0)][int(ynew0)] == '1')
+			{
+				
+					win_game(lcd);
+			}
+
+
+		if (display[int(xnew0)][int(ynew0)]=='5' )
 		{
 			
 		
@@ -213,34 +216,40 @@ void testFPS() {
 				printf("boundary\n");
 			}
 
-		/*	if((display[(int)(xnew0 + 1)][(int)(ynew0)] == '1')|| (display[(int)(xnew0 - 1)][(int) (ynew0)] == '1'))
-			{
-				speedy1 = 0;
-//				speedx1 = 0;
-				printf("Vertical\n");
-			}
+		}
+
+		if (display[int(xnew0)][int(ynew0)]=='6')
+		{
 			
-			if((display[int(xnew0)][int(ynew0 + 1)] == '1') || (display[int(xnew0)][int(ynew0 - 1)] == '1') )
+		
 			{
-				speedx1 = 0;
-//				speedy1 = 0;
-				printf("Horizontal\n");
-			}
-*			if(((int)(xnew0) == (int)ynew0) ||( ((int)(xnew0) + (int)(ynew0)) == 127))
-			{
-				printf("slanting\n");
+				xnew0 = x0;
+				ynew0 = y0;
+				printf("boundary\n");
 			}
 
-*/		       		
 		}
+
+
         if (xnew0 < 2) { xnew0=2; speedx1=0;}
         if (xnew0 > 125) { xnew0=125; speedx1=0;}
         if (ynew0 < 2) { ynew0=2; speedy1=0;}
         if (ynew0 > 125) { ynew0=125; speedy1=0;}
+	
+		xdiff = xnew0 - xmid;
+		ydiff = ynew0 - ymid;
+
+		ynew10 = xmid + xdiff;
+		xnew10 = ymid - ydiff +1;
+
+		ynew20 = xmid -xdiff +1;
+		xnew20 = ymid +ydiff;
 
          
 //		printf("in while, xnew0: %f, x0: %f,  ynew0: %f, y0: %f,speedx = %f,speedy = %f,accx = %f,accy = %f\n",xnew0,x0,ynew0,y0,speedx1,speedy1,accx,accy);
 		lcd.drawCircle(xnew0,ynew0,radius);
+		lcd.drawCircle(xnew10,ynew10,radius);
+		lcd.drawCircle(xnew20,ynew20,radius);
 
 		speedx = speedx1;
 		speedy = speedy1;
