@@ -50,17 +50,17 @@ int main(void)
 			
 	if (master==True) {
 
-		if (X1 >= 60 && X1 <= 70 Y1 >= 60 && Y1 <= 70 ) 
+		if (X1 >= 60 && X1 <= 70 && Y1 >= 60 && Y1 <= 70 ) 
 		{
 			send="STOP"
 			display("Player_01 is a Winner")
 		}
-		if (X2 >= 60 && X2 <= 70 Y2 >= 60 && Y2 <= 70 ) 
+		if (X2 >= 60 && X2 <= 70 && Y2 >= 60 && Y2 <= 70 ) 
 		{
 			send="STOP"
 			display("Player_02 is a Winner")
 		}
-		if (X3 >= 60 && X3 <= 70 Y3 >= 60 && Y3 <= 70 )  
+		if (X3 >= 60 && X3 <= 70 && Y3 >= 60 && Y3 <= 70 )  
 		{
 			send="STOP"
 			display("Player_03 is a Winner")	
