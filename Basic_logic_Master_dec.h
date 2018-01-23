@@ -51,7 +51,7 @@ while(decideMaster==1)
 		
 	}
 		
-	if(P01>P2 && P01>P03)
+	if(P01>P02 && P01>P03)
 	{
  	 Pi01==1;		  #P1 is Master
 	 Pi02==0;
@@ -70,7 +70,7 @@ while(decideMaster==1)
 	 send ("RESLT010");
 	}
 
-	if(P3>P1 && P3>P2)
+	if(P03>P01 && P03>P02)
 	{
 	  Pi01==0;		
 	  Pi02==0; 		
