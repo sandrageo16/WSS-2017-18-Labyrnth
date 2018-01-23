@@ -115,7 +115,7 @@ while(Pi01==1)
 		
 	}
 	
-		while(Pi01==0)
+		while(Pi01==0)                                       # Do nothing just play the game and wait for master command(slave mode)
 	
 		{
 		marble.cpp()
