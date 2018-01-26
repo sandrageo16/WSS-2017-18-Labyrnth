@@ -15,10 +15,15 @@ char P1,P2,P3
 bool decideMaster
 int Pi01,Pi02,Pi03
 
-int main(void)
+int num   #Pi number
+
+main(void)
+{	
+decideMaster= True	
+	
 
  {
-while(decideMaster==1)
+while(decideMaster==True)
 	{
 	receive(data)
 	#split_the_string
@@ -55,7 +60,7 @@ while(decideMaster==1)
 		
 	if(P01>P02>P03)
 	{
- 	 Pi01==1;		    #P1 is Master
+ 	 Pi01==1;		        #P1 is Master
 	 Pi02==2;			#P3 is Player 2
 	 Pi03==3;			#P3 is Player 3
 		
@@ -65,14 +70,14 @@ while(decideMaster==1)
 		
 	if(P01>P03>P02)
 	{
- 	 Pi01==1;		  	#P1 is Master
+ 	 Pi01==1;		        #P1 is Master
 	 Pi02==3;			#P2 is Player 3
 	 Pi03==2;			#P3 is Player 2
 	 send ("0000132");
 	}
 	if(P02>P01>P03)
 	{
- 	 Pi01==2;		    #P1 is Player 2
+ 	 Pi01==2;		        #P1 is Player 2
 	 Pi02==1;			#P2 is Master
 	 Pi03==3;			#P3 is Player 3
 		
@@ -104,12 +109,12 @@ while(decideMaster==1)
 	 Pi03==1;			#P3 is Master
 	 send ("0000321");
 	}
-	  decideMaster=0 ;     #Master Pi has been set
-	}
+	  decideMaster=False ;     #Master Pi has been set
+}
 
-	if()
 	
-while(Pi01==1)
+	
+while(Pi01==1 && decideMaster=False)
 	
     {
 		
@@ -139,27 +144,15 @@ while(Pi01==1)
 				send("Player_01 and Player_02 have lost the Game")	
 			}
 		
-		marble.cpp()
+			marble.cpp()
 		
-		else 
-		{
-		break;
-		
-		}
  	    
 		}
 		
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-		while(Pi01==2)                                       # Do nothing just play the game as player 2 and wait for master command(slave mode)
+while(Pi01==2)                                       # Do nothing just play the game as player 2 and wait for master command(slave mode)
 	
 		{
 		marble.cpp()
@@ -167,7 +160,7 @@ while(Pi01==1)
 		}
 	
 	
-		while(Pi01==3)                                       # Do nothing just play the game as player 3 and wait for master command(slave mode)
+while(Pi01==3)                                       # Do nothing just play the game as player 3 and wait for master command(slave mode)
 	
 		{
 		marble.cpp()    
